@@ -13,11 +13,14 @@ tool_chk() {
 
 gif() {
   local gifdir="$TMPDIR/gif"
+  local mov_file="${1}"
+  output_file="$(echo "${mov_file}" | awk -F. '{print $1}')"
+
   rm -rf "${gifdir}"
   mkdir -p "${gifdir}"
 
-  ffmpeg -i "${1}" -r 10 -filter:v "setpts=0.5*PTS" "${gifdir}"/frame%04d.png
-  gifski -o output.gif "${gifdir}"/frame*.png
+  ffmpeg -i "${mov_file}" -r 10 -filter:v "setpts=0.5*PTS" "${gifdir}"/frame%04d.png
+  gifski -o "${output_file}.gif" "${gifdir}"/frame*.png
 }
 
 tool_chk ffmpeg
